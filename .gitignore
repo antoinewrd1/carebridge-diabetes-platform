@@ -1,0 +1,9 @@
+data/
+*.duckdb
+*.duckdb.wal
+.env
+__pycache__/
+.venv/
+mlruns/
+.Rhistory
+reports/figures/*.png
