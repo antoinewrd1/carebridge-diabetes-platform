@@ -33,8 +33,15 @@ WITH typed AS (
         NULLIF(max_glu_serum, 'None')                         AS max_glu_serum,
         NULLIF("A1Cresult", 'None')                           AS a1c_result,
 
-        insulin, metformin, glipizide, glyburide,
-        pioglitazone, rosiglitazone,
+        -- All 23 medication columns except examide and citoglipton, which are
+        -- constant "No" across the full source file and carry no information.
+        metformin, repaglinide, nateglinide, chlorpropamide, glimepiride,
+        acetohexamide, glipizide, glyburide, tolbutamide, pioglitazone,
+        rosiglitazone, acarbose, miglitol, troglitazone, tolazamide,
+        insulin,
+        "glyburide-metformin", "glipizide-metformin",
+        "glimepiride-pioglitazone", "metformin-rosiglitazone",
+        "metformin-pioglitazone",
         "change"                                              AS med_change,
         "diabetesMed"                                         AS on_diabetes_med,
         readmitted

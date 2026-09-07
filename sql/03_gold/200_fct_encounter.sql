@@ -46,6 +46,13 @@ SELECT
     medical_specialty, payer_code,
     diag_1, diag_1_group,
     max_glu_serum, a1c_result, a1c_tested, med_changed, on_diabetes_med,
+    metformin, repaglinide, nateglinide, chlorpropamide, glimepiride,
+    acetohexamide, glipizide, glyburide, tolbutamide, pioglitazone,
+    rosiglitazone, acarbose, miglitol, troglitazone, tolazamide,
+    insulin,
+    "glyburide-metformin", "glipizide-metformin",
+    "glimepiride-pioglitazone", "metformin-rosiglitazone",
+    "metformin-pioglitazone",
     is_hospice,
 
     encounter_seq, patient_encounter_count,
