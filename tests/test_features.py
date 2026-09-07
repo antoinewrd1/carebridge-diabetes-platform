@@ -51,6 +51,11 @@ def test_service_rates_divide_by_length_of_stay():
 def test_log_transform_handles_zero():
     assert add_features(_row(number_inpatient=0)).loc[0, "log_number_inpatient"] == 0.0
 
+def test_any_utilization_flags():
+    assert add_features(_row(number_inpatient=0)).loc[0, "any_number_inpatient"] == 0
+    assert add_features(_row(number_inpatient=1)).loc[0, "any_number_inpatient"] == 1
+    assert add_features(_row(number_emergency=5)).loc[0, "any_number_emergency"] == 1
+
 
 def test_high_prior_utilizer_threshold():
     assert add_features(_row(number_inpatient=1)).loc[0, "high_prior_utilizer"] == 0

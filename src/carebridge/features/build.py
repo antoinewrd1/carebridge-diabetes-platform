@@ -45,6 +45,12 @@ def add_features(df: pd.DataFrame) -> pd.DataFrame:
     for c in ["number_inpatient", "number_emergency", "number_outpatient"]:
         out[f"log_{c}"] = np.log1p(out[c])
 
+    # Prior-utilization counts are 87-93% zero with kurtosis up to 1,208.
+    # log1p rescales the tail but leaves the spike at zero untouched, so a
+    # binary indicator is the more honest encoding for linear models.
+    for c in ["number_inpatient", "number_emergency", "number_outpatient"]:
+        out[f"any_{c}"] = (out[c] > 0).astype(int)
+
     out["high_prior_utilizer"] = (out["number_inpatient"] >= 2).astype(int)
     # H1b interaction. Built from any_med_adjusted, NOT the source `change`
     # column: `change` flags continued medication (only No/Steady appear in
@@ -67,5 +73,7 @@ if __name__ == "__main__":
     print(f"shape: {d.shape}")
     print(f"30-day readmission rate: {d['readmitted_30d'].mean(): .4f}")
     print("\nderived features:")
-    for c in ["n_active_diabetes_meds", "any_med_adjusted", "procedures_per_day", "meds_per_day", "log_number_inpatient", "high_prior_utilizer", "a1c_tested_and_changed", "is_hospice"]:
+    for c in ["n_active_diabetes_meds", "any_med_adjusted", "procedures_per_day", "meds_per_day", "log_number_inpatient", "any_number_inpatient",
+              "any_number_emergency", "any_number_outpatient",
+              "high_prior_utilizer", "a1c_tested_and_changed", "is_hospice"]:
         print(f"  {c:<26} mean={d[c].mean():.4f}  max={d[c].max():.2f}")
