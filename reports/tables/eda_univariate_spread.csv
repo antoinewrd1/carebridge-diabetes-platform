@@ -1,0 +1,9 @@
+feature,encoding,low_pct,high_pct,spread_pp
+number_inpatient,binary (any vs none),8.09,15.34,7.25
+number_diagnoses,7 bins,6.19,12.33,6.13
+time_in_hospital,7 bins,7.15,11.45,4.57
+num_medications,10 bins,6.49,10.31,3.93
+num_lab_procedures,10 bins,7.02,9.74,3.52
+number_emergency,binary (any vs none),8.7,11.98,3.28
+number_outpatient,binary (any vs none),8.76,10.14,1.38
+num_procedures,5 bins,8.96,8.41,1.17

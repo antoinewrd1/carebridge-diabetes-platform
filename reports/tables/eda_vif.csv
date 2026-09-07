@@ -1,0 +1,14 @@
+feature,vif,flag
+meds_per_day,4.037415909187869,ok
+labs_per_day,3.510881129891688,ok
+procedures_per_day,3.4421135412588346,ok
+num_medications,3.353906587756962,ok
+num_procedures,3.2190267622412336,ok
+time_in_hospital,3.1015051495624286,ok
+num_lab_procedures,2.4752544266024126,ok
+number_diagnoses,1.1816522213760714,ok
+age_midpoint,1.0890388027752411,ok
+n_active_diabetes_meds,1.0762122881309344,ok
+number_inpatient,1.0381714612786879,ok
+number_emergency,1.037376388540987,ok
+number_outpatient,1.020588047562451,ok
