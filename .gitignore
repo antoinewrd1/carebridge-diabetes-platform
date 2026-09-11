@@ -6,4 +6,6 @@ __pycache__/
 .venv/
 mlruns/
 .Rhistory
-reports/figures/*.png
+.egg-info/
+*.egg-info/
+*.egg-info/
