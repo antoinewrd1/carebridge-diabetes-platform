@@ -9,3 +9,4 @@ mlruns/
 .egg-info/
 *.egg-info/
 *.egg-info/
+reports/*.docx
