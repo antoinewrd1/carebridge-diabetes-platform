@@ -14,4 +14,11 @@ UNION ALL SELECT 'null_race', count(*) FROM silver.encounters WHERE race IS NULL
 UNION ALL SELECT 'null_payer_code', count(*) FROM silver.encounters WHERE payer_code IS NULL
 UNION ALL SELECT 'null_medical_specialty', count(*) FROM silver.encounters WHERE medical_specialty IS NULL
 UNION ALL SELECT 'a1c_tested', sum(a1c_tested) FROM silver.encounters
-UNION ALL SELECT 'brfss_rows', count(*) FROM silver.brfss;
+UNION ALL SELECT 'brfss_rows', count(*) FROM silver.brfss
+UNION ALL SELECT 'excluded_post_death_sequence',
+    (SELECT count(DISTINCT a.patient_nbr)
+     FROM bronze.encounters a
+     JOIN bronze.encounters b
+       ON a.patient_nbr = b.patient_nbr
+      AND CAST(b.encounter_id AS BIGINT) > CAST(a.encounter_id AS BIGINT)
+     WHERE CAST(a.discharge_disposition_id AS INTEGER) IN (11, 19, 20));

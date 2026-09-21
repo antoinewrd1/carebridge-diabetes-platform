@@ -67,4 +67,16 @@ flagged AS (
 )
 SELECT * FROM flagged
 WHERE NOT is_expired
-  AND gender IS NOT NULL;
+  AND gender IS NOT NULL
+   -- Exclude patients with a recorded encounter AFTER an expired disposition.
+  -- 13 patients; demographics consistent across encounters, so identifier
+  -- collision is ruled out. Cause is miscoded death or non-chronological
+  -- encounter_id, unresolvable without admission dates.
+  AND patient_nbr NOT IN (
+    SELECT DISTINCT CAST(a.patient_nbr AS BIGINT)
+    FROM bronze.encounters a
+    JOIN bronze.encounters b
+    ON a.patient_nbr = b.patient_nbr
+    AND CAST(b.encounter_id AS BIGINT) > CAST(a.encounter_id AS BIGINT)
+    WHERE CAST(a.discharge_disposition_id AS INTEGER) IN (11, 19, 20)
+  );
