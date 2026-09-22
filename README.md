@@ -8,7 +8,7 @@ Two public datasets, two research questions, one DuckDB file that both Python an
 
 ## Findings
 
-Three data quality findings changed the analysis. Each is documented with its evidence in `reports/`.
+Four data quality findings changed the analysis. Each is documented with its evidence in `reports/`.
 
 ### 1. The conventional leakage exclusion is partly wrong
 
@@ -59,7 +59,7 @@ The same contrast computed as binary gives 11.98% against 8.70%, a 3.28 point di
 
 Both accessed through Kaggle mirrors; neither is redistributed here. The pipeline downloads them.
 
-After cleaning: **100,111 encounters from 70,436 patients**, 8.94% 30-day readmission in the first-encounter cohort.
+After cleaning: **100,111 encounters from 70,423 patients**, 8.93% 30-day readmission in the first-encounter modeling cohort after the 13 unresolved post-expired cases were excluded.
 
 The survey source ships three file variants. The 50/50 rebalanced file is explicitly not used — its artificial class balance would invalidate every prevalence-dependent statistic, and the observed 13.9% prevalence is itself something the analysis studies.
 
@@ -81,7 +81,7 @@ sql/01_bronze/     land raw data unchanged, all_varchar, lineage columns
 sql/02_silver/     typed, sentinels resolved, leakage removed, DQ tables
 sql/03_gold/       star schema, ICD-9 grouping, window features, ML cohort
 src/carebridge/    ingest, features, stats, viz, reports
-tests/             unit tests on feature derivation
+tests/             unit tests on feature derivation and model specification
 reports/           figures, tables, generated documents
 notebooks/         EDA notebook
 ```
@@ -108,10 +108,10 @@ uv pip install -r requirements.txt && uv pip install -e .
 
 python -m carebridge.ingest.download        # fetch sources
 python -m carebridge.ingest.build_db        # bronze -> silver -> gold
-python -m pytest tests/ -q                  # 12 tests
+python -m pytest tests/ -q                  # 15 tests
 python -m carebridge.viz.eda                # EDA figures and tables
 python -m carebridge.stats.distributions    # H1e
-python -m carebridge.stats.tests            # hypothesis family
+python -m carebridge.stats.tests            # hypothesis family\npython -m carebridge.models.readmission_models  # OOF model comparison\npython -m carebridge.models.calibration         # probability calibration
 ```
 
 `python check_sql.py` runs every SQL file in dependency order and stops at the first failure — useful while editing the layers.
@@ -120,11 +120,11 @@ python -m carebridge.stats.tests            # hypothesis family
 
 ## Method notes
 
-**Patient-grouped splitting is mandatory.** 100,111 encounters come from 70,436 patients; roughly 23% contribute more than one. A naive random split leaks patient-specific information across the partition and inflates measured performance.
+**Patient-grouped splitting is mandatory.** 100,111 encounters come from 70,423 patients; some contribute more than one. A naive random split leaks patient-specific information across the partition and inflates measured performance.
 
 **Precision-recall over ROC.** Prevalence runs 4.1% to 13.9% across the four outcomes, and ROC-AUC flatters models on imbalanced data.
 
-**Effect sizes accompany every p-value.** At these sample sizes significance is nearly uninformative; interpretation is driven by magnitude, and the multiple comparison correction is fixed before results are read.
+**Out-of-fold predictions are the evaluation substrate.** Model discrimination and calibration use predictions generated on patients held outside each model's training fold. Threshold analysis is treated separately because choosing a cutoff from the same outcomes used for evaluation can make the reported operating point optimistic.\n\n**Effect sizes accompany every p-value.** At these sample sizes significance is nearly uninformative; interpretation is driven by magnitude, and the multiple comparison correction is fixed before results are read.
 
 **Boundary-corrected likelihood ratio tests.** Testing a dispersion parameter against zero places the null on the edge of the parameter space, so the reference distribution is a 50:50 mixture of chi-squared(0) and chi-squared(1) and the naive p-value is halved.
 
@@ -142,7 +142,7 @@ python -m carebridge.stats.tests            # hypothesis family
 
 ## Stack
 
-Python 3.12 · DuckDB · pandas · NumPy · SciPy · statsmodels · scikit-learn · matplotlib · pytest
+Python 3.12 · DuckDB · pandas · NumPy · SciPy · statsmodels · scikit-learn · XGBoost · matplotlib · pytest
 
 ---
 
