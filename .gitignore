@@ -10,3 +10,7 @@ mlruns/
 *.egg-info/
 *.egg-info/
 reports/*.docx
+!reports/CareBridge_Final_Report.docx
+.cache/
+build/
+dist/

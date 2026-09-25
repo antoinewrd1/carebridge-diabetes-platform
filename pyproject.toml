@@ -2,6 +2,7 @@
 name = "carebridge"
 version = "0.1.0"
 requires-python = ">=3.10,<3.13"
+dynamic = ["dependencies"]
 
 [build-system]
 requires = ["setuptools>=68"]
@@ -9,6 +10,9 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
 
 [tool.ruff]
 line-length = 100

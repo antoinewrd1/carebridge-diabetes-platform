@@ -19,7 +19,10 @@ MED_COLS = [
 def load_cohort(table: str = "gold.ml_cohort") -> pd.DataFrame:
     con = duckdb.connect(str(DB_PATH), read_only=True)
     try:
-        return con.execute(f"SELECT * FROM {table}").fetchdf()
+        query = f"SELECT * FROM {table}"
+        if table in {"gold.ml_cohort", "gold.fct_encounter"}:
+            query += " ORDER BY patient_nbr, encounter_id"
+        return con.execute(query).fetchdf()
     finally:
         con.close()
 

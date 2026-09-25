@@ -73,7 +73,8 @@ def main() -> None:
         summary = summarize_model(y, p)
         summary_rows.append({"model": display_name, **summary})
 
-        mean_pred, observed = calibration_curve(
+        # sklearn returns the observed event rate first, then mean prediction.
+        observed, mean_pred = calibration_curve(
             y, p, n_bins=N_BINS, strategy="quantile"
         )
         for i, (pred, obs) in enumerate(zip(mean_pred, observed), start=1):
@@ -115,7 +116,9 @@ def main() -> None:
     ax.legend()
     fig.tight_layout()
     out_fig = REPORTS / "figures" / "rq1_calibration.svg"
-    fig.savefig(out_fig, format="svg")
+    fig.savefig(out_fig, format="svg", metadata={"Date": None})
+    out_fig.write_text("\n".join(line.rstrip() for line in out_fig.read_text().splitlines()) + "\n")
+    fig.savefig(REPORTS / "figures" / "rq1_calibration.png", dpi=180)
     plt.close(fig)
 
     print("=== RQ1 raw probability calibration ===")

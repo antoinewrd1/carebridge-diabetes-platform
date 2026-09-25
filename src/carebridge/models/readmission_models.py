@@ -101,9 +101,10 @@ class AnomalyScore(BaseEstimator, TransformerMixin):
 
 
 # ------------------------------------------------------------------ pipelines
-def make_preprocessor() -> ColumnTransformer:
+def make_preprocessor(numeric_features=None) -> ColumnTransformer:
+    numeric_features = NUMERIC if numeric_features is None else numeric_features
     return ColumnTransformer([
-        ("num", StandardScaler(), NUMERIC + ["anomaly_score"]),
+        ("num", StandardScaler(), list(numeric_features) + ["anomaly_score"]),
         ("bin", "passthrough", BINARY),
         ("cat", OneHotEncoder(handle_unknown="infrequent_if_exist",
                               min_frequency=100, sparse_output=False), CATEGORICAL),
@@ -133,10 +134,10 @@ def make_models() -> dict:
     }
 
 
-def make_pipeline(estimator) -> Pipeline:
+def make_pipeline(estimator, numeric_features=None) -> Pipeline:
     return Pipeline([
         ("anomaly", AnomalyScore()),
-        ("prep", make_preprocessor()),
+        ("prep", make_preprocessor(numeric_features)),
         ("model", estimator),
     ])
 

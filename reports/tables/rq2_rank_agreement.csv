@@ -1,0 +1,4 @@
+outcome_a,outcome_b,spearman_rank_correlation
+has_diabetes,has_stroke,0.719298245614035
+has_diabetes,has_cardiac,0.6929824561403508
+has_stroke,has_cardiac,0.7649122807017543

@@ -1,0 +1,2 @@
+comparison,pr_auc_difference,mean_pr_auc_difference,ci_low,ci_high,excludes_zero,bootstrap_resamples
+with_future_count - safe_model,0.12044875047676493,0.12025302608064825,0.11192472495803578,0.12910475623924358,True,1000

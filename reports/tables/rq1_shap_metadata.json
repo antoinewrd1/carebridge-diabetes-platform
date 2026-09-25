@@ -1,0 +1,17 @@
+{
+  "cohort_n": 70423,
+  "events": 6291,
+  "seed": 42,
+  "explain_n": 5000,
+  "background_n": 100,
+  "model_output": "probability",
+  "feature_perturbation": "interventional",
+  "fit_scope": "full first-encounter cohort; descriptive interpretation only",
+  "source_aggregation": "mean(abs(sum(signed encoded SHAP values per patient)))",
+  "max_additivity_error": 3.440842565732849e-07,
+  "versions": {
+    "shap": "0.48.0",
+    "xgboost": "2.0.3",
+    "numpy": "1.26.4"
+  }
+}

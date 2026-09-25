@@ -1,0 +1,11 @@
+{
+  "cohort_n": 70423,
+  "events": 6291,
+  "seed": 42,
+  "folds": 5,
+  "bootstrap_resamples": 1000,
+  "patients_with_multiple_retained_encounters": 16475,
+  "leakage_feature": "patient_encounter_count",
+  "interval_scope": "paired patient bootstrap of fixed OOF predictions; no model refitting",
+  "chronology": "first retained encounter by encounter_id, as defined in Gold SQL"
+}
